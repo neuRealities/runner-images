@@ -163,7 +163,7 @@ source "azure-arm" "image" {
   managed_image_resource_group_name      = "${var.managed_image_resource_group_name}"
   managed_image_storage_account_type     = "${var.managed_image_storage_account_type}"
   object_id                              = "${var.object_id}"
-  os_disk_size_gb                        = "256"
+  os_disk_size_gb                        = "172"
   os_type                                = "Windows"
   private_virtual_network_with_public_ip = "${var.private_virtual_network_with_public_ip}"
   subscription_id                        = "${var.subscription_id}"
@@ -270,12 +270,7 @@ build {
   provisioner "powershell" {
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
     scripts          = [
-      "${path.root}/../scripts/build/Install-Docker.ps1",
-      "${path.root}/../scripts/build/Install-DockerWinCred.ps1",
-      "${path.root}/../scripts/build/Install-DockerCompose.ps1",
       "${path.root}/../scripts/build/Install-PowershellCore.ps1",
-      "${path.root}/../scripts/build/Install-WebPlatformInstaller.ps1",
-      "${path.root}/../scripts/build/Install-Runner.ps1"
     ]
   }
 
@@ -289,7 +284,6 @@ build {
     environment_vars  = ["IMAGE_FOLDER=${var.image_folder}"]
     scripts           = [
       "${path.root}/../scripts/build/Install-VisualStudio.ps1",
-      "${path.root}/../scripts/build/Install-KubernetesTools.ps1"
     ]
     valid_exit_codes  = [0, 3010]
   }
@@ -303,22 +297,11 @@ build {
     pause_before     = "2m0s"
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
     scripts          = [
-      "${path.root}/../scripts/build/Install-Wix.ps1",
-      "${path.root}/../scripts/build/Install-WDK.ps1",
-      "${path.root}/../scripts/build/Install-VSExtensions.ps1",
       "${path.root}/../scripts/build/Install-AzureCli.ps1",
       "${path.root}/../scripts/build/Install-AzureDevOpsCli.ps1",
       "${path.root}/../scripts/build/Install-ChocolateyPackages.ps1",
-      "${path.root}/../scripts/build/Install-JavaTools.ps1",
-      "${path.root}/../scripts/build/Install-Kotlin.ps1",
       "${path.root}/../scripts/build/Install-OpenSSL.ps1"
     ]
-  }
-
-  provisioner "powershell" {
-    execution_policy = "remotesigned"
-    environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
-    scripts          = ["${path.root}/../scripts/build/Install-ServiceFabricSDK.ps1"]
   }
 
   provisioner "windows-restart" {
@@ -330,53 +313,28 @@ build {
   }
 
   provisioner "powershell" {
+    elevated_password = "${var.install_password}"
+    elevated_user     = "${var.install_user}"
+    environment_vars  = ["IMAGE_FOLDER=${var.image_folder}"]
+    scripts           = [
+      "${path.root}/../scripts/build/Install-Unity.ps1",
+    ]
+  }
+
+  provisioner "powershell" {
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
     scripts          = [
-      "${path.root}/../scripts/build/Install-ActionsCache.ps1",
-      "${path.root}/../scripts/build/Install-Ruby.ps1",
-      "${path.root}/../scripts/build/Install-PyPy.ps1",
-      "${path.root}/../scripts/build/Install-Toolset.ps1",
-      "${path.root}/../scripts/build/Configure-Toolset.ps1",
-      "${path.root}/../scripts/build/Install-NodeJS.ps1",
-      "${path.root}/../scripts/build/Install-AndroidSDK.ps1",
       "${path.root}/../scripts/build/Install-PowershellAzModules.ps1",
-      "${path.root}/../scripts/build/Install-Pipx.ps1",
       "${path.root}/../scripts/build/Install-Git.ps1",
       "${path.root}/../scripts/build/Install-GitHub-CLI.ps1",
-      "${path.root}/../scripts/build/Install-PHP.ps1",
-      "${path.root}/../scripts/build/Install-Rust.ps1",
-      "${path.root}/../scripts/build/Install-Sbt.ps1",
-      "${path.root}/../scripts/build/Install-Chrome.ps1",
-      "${path.root}/../scripts/build/Install-EdgeDriver.ps1",
-      "${path.root}/../scripts/build/Install-Firefox.ps1",
-      "${path.root}/../scripts/build/Install-Selenium.ps1",
-      "${path.root}/../scripts/build/Install-IEWebDriver.ps1",
-      "${path.root}/../scripts/build/Install-Apache.ps1",
-      "${path.root}/../scripts/build/Install-Nginx.ps1",
       "${path.root}/../scripts/build/Install-Msys2.ps1",
-      "${path.root}/../scripts/build/Install-WinAppDriver.ps1",
-      "${path.root}/../scripts/build/Install-R.ps1",
       "${path.root}/../scripts/build/Install-AWSTools.ps1",
-      "${path.root}/../scripts/build/Install-DACFx.ps1",
-      "${path.root}/../scripts/build/Install-MysqlCli.ps1",
-      "${path.root}/../scripts/build/Install-SQLPowerShellTools.ps1",
-      "${path.root}/../scripts/build/Install-SQLOLEDBDriver.ps1",
       "${path.root}/../scripts/build/Install-DotnetSDK.ps1",
       "${path.root}/../scripts/build/Install-Mingw64.ps1",
-      "${path.root}/../scripts/build/Install-Haskell.ps1",
-      "${path.root}/../scripts/build/Install-Stack.ps1",
-      "${path.root}/../scripts/build/Install-Miniconda.ps1",
-      "${path.root}/../scripts/build/Install-AzureCosmosDbEmulator.ps1",
-      "${path.root}/../scripts/build/Install-Mercurial.ps1",
       "${path.root}/../scripts/build/Install-Zstd.ps1",
       "${path.root}/../scripts/build/Install-NSIS.ps1",
       "${path.root}/../scripts/build/Install-Vcpkg.ps1",
-      "${path.root}/../scripts/build/Install-PostgreSQL.ps1",
-      "${path.root}/../scripts/build/Install-Bazel.ps1",
-      "${path.root}/../scripts/build/Install-AliyunCli.ps1",
       "${path.root}/../scripts/build/Install-RootCA.ps1",
-      "${path.root}/../scripts/build/Install-MongoDB.ps1",
-      "${path.root}/../scripts/build/Install-CodeQLBundle.ps1",
       "${path.root}/../scripts/build/Configure-Diagnostics.ps1"
     ]
   }
@@ -391,7 +349,6 @@ build {
       "${path.root}/../scripts/build/Configure-GDIProcessHandleQuota.ps1",
       "${path.root}/../scripts/build/Configure-Shell.ps1",
       "${path.root}/../scripts/build/Configure-DeveloperMode.ps1",
-      "${path.root}/../scripts/build/Install-LLVM.ps1"
     ]
   }
 
@@ -406,33 +363,7 @@ build {
     environment_vars = ["IMAGE_FOLDER=${var.image_folder}"]
     scripts          = [
       "${path.root}/../scripts/build/Install-WindowsUpdatesAfterReboot.ps1",
-      "${path.root}/../scripts/tests/RunAll-Tests.ps1"
     ]
-  }
-
-  provisioner "powershell" {
-    inline = ["if (-not (Test-Path ${var.image_folder}\\tests\\testResults.xml)) { throw '${var.image_folder}\\tests\\testResults.xml not found' }"]
-  }
-
-  provisioner "powershell" {
-    environment_vars = ["IMAGE_VERSION=${var.image_version}", "IMAGE_FOLDER=${var.image_folder}"]
-    inline           = ["pwsh -File '${var.image_folder}\\SoftwareReport\\Generate-SoftwareReport.ps1'"]
-  }
-
-  provisioner "powershell" {
-    inline = ["if (-not (Test-Path C:\\software-report.md)) { throw 'C:\\software-report.md not found' }", "if (-not (Test-Path C:\\software-report.json)) { throw 'C:\\software-report.json not found' }"]
-  }
-
-  provisioner "file" {
-    destination = "${path.root}/../Windows2022-Readme.md"
-    direction   = "download"
-    source      = "C:\\software-report.md"
-  }
-
-  provisioner "file" {
-    destination = "${path.root}/../software-report.json"
-    direction   = "download"
-    source      = "C:\\software-report.json"
   }
 
   provisioner "powershell" {
