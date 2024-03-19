@@ -67,17 +67,6 @@ New-Item -Path $winInstallDir -ItemType Directory -Force | Out-Null
 # Remove AllUsersAllHosts profile
 Remove-Item $profile.AllUsersAllHosts -Force -ErrorAction SilentlyContinue | Out-Null
 
-# Clean yarn and npm cache
-cmd /c "yarn cache clean 2>&1" | Out-Null
-if ($LASTEXITCODE -ne 0) {
-    throw "Failed to clean yarn cache"
-}
-
-cmd /c "npm cache clean --force 2>&1" | Out-Null
-if ($LASTEXITCODE -ne 0) {
-    throw "Failed to clean npm cache"
-}
-
 # allow msi to write to temp folder
 # see https://github.com/actions/runner-images/issues/1704
 cmd /c "icacls $env:SystemRoot\Temp /grant Users:f /t /c /q 2>&1" | Out-Null
