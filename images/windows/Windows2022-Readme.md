@@ -82,7 +82,6 @@
 - R 4.4.2
 - Service Fabric SDK 9.1.1436.9590
 - Stack 3.1.1
-- Subversion (SVN) 1.14.4
 - Swig 4.1.1
 - VSWhere 3.1.7
 - WinAppDriver 1.2.2009.02003

@@ -64,12 +64,6 @@ Describe "Pulumi" {
     }
 }
 
-Describe "Svn" {
-    It "svn" {
-        "svn --version --quiet" | Should -ReturnZeroExitCode
-    }
-}
-
 Describe "Swig" {
     It "Swig" {
         "swig -version" | Should -ReturnZeroExitCode
