@@ -3,12 +3,6 @@
 ##  Desc:  Applies various configuration settings to the final image
 ################################################################################
 
-Write-Host "Cleanup WinSxS"
-dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase
-if ($LASTEXITCODE -ne 0) {
-    throw "Failed to cleanup WinSxS"
-}
-
 # Set default version to 1 for WSL (aka LXSS - Linux Subsystem)
 # The value should be set in the default user registry hive
 # https://github.com/actions/runner-images/issues/5760
@@ -31,7 +25,7 @@ if (Test-IsWin22) {
     $key.SetValue("DefaultVersion", "1", "DWord")
     $key.Handle.Close()
     [System.GC]::Collect()
-    
+
     Dismount-RegistryHive "HKLM\DEFAULT"
 }
 
@@ -131,11 +125,11 @@ $servicesToDisable = @(
     'wuauserv'
     'DiagTrack'
     'dmwappushservice'
-    'PcaSvc'
+    $(if(-not (Test-IsWin25)){'PcaSvc'})
     'SysMain'
     'gupdate'
     'gupdatem'
-    'StorSvc'
+    $(if(-not (Test-IsWin25)){'StorSvc'})
 ) | Get-Service -ErrorAction SilentlyContinue
 Stop-Service $servicesToDisable
 $servicesToDisable.WaitForStatus('Stopped', "00:01:00")
