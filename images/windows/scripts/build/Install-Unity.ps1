@@ -19,6 +19,7 @@ $sdkInstallRoot = "C:\Program Files\Unity ${UNITY_VERSION}\Editor\Data\PlaybackE
 $jdkUrl = "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.9%2B9.1/OpenJDK17U-jdk_x64_windows_hotspot_17.0.9_9.zip"
 $jdkArchPath = Invoke-DownloadWithRetry -Url $jdkUrl
 Expand-7ZipArchive -Path $jdkArchPath -DestinationPath "${sdkInstallRoot}"
+Start-Sleep -Seconds 5.0
 Rename-Item -Path "${sdkInstallRoot}\jdk-17.0.9+9" -NewName "OpenJDK"
 
 # Android SDK and NDK must be fetched separately. Version for Unity 6000.x.
