@@ -5,8 +5,8 @@
 ##  Mod:   2025-01-13
 ################################################################################
 
-$UNITY_VERSION = "6000.0.28f1"
-$UNITY_DOWNLOAD_HASH = "f336aca0cab5"
+$UNITY_VERSION = "6000.0.34f1"
+$UNITY_DOWNLOAD_HASH = "5ab2d9ed9190"
 
 $argumentList = ("/S", "/D=C:\Program Files\Unity ${UNITY_VERSION}")
 Install-Binary -Url "https://download.unity3d.com/download_unity/${UNITY_DOWNLOAD_HASH}/Windows64EditorInstaller/UnitySetup64.exe" -InstallArgs $argumentList
