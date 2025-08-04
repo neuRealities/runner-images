@@ -1,18 +1,18 @@
 ################################################################################
 ##  File:  Install-Unity.ps1
-##  Desc:  Install Unity 6000.0.28f1
+##  Desc:  Install Unity 6000.1.14f1
 ##  By:    Philip Lamb
-##  Mod:   2025-01-13
+##  Mod:   2025-08-04
 ################################################################################
 
-$UNITY_VERSION = "6000.0.34f1"
-$UNITY_DOWNLOAD_HASH = "5ab2d9ed9190"
+$UNITY_VERSION = "6000.1.14f1"
+$UNITY_DOWNLOAD_HASH = "db7aa045cc2c"
 
 $argumentList = ("/S", "/D=C:\Program Files\Unity ${UNITY_VERSION}")
 Install-Binary -Url "https://download.unity3d.com/download_unity/${UNITY_DOWNLOAD_HASH}/Windows64EditorInstaller/UnitySetup64.exe" -InstallArgs $argumentList
 Install-Binary -Url "https://download.unity3d.com/download_unity/${UNITY_DOWNLOAD_HASH}/TargetSupportInstaller/UnitySetup-Windows-IL2CPP-Support-for-Editor-${UNITY_VERSION}.exe" -InstallArgs $argumentList
 Install-Binary -Url "https://download.unity3d.com/download_unity/${UNITY_DOWNLOAD_HASH}/TargetSupportInstaller/UnitySetup-Android-Support-for-Editor-${UNITY_VERSION}.exe" -InstallArgs $argumentList
-
+Install-Binary -Url "https://download.unity3d.com/download_unity/${UNITY_DOWNLOAD_HASH}/TargetSupportInstaller/UnitySetup-Mac-Mono-Support-for-Editor-${UNITY_VERSION}.exe" -InstallArgs $argumentList
 $sdkInstallRoot = "C:\Program Files\Unity ${UNITY_VERSION}\Editor\Data\PlaybackEngines\AndroidPlayer"
 
 # OpenJDK must be fetched separately. Version for Unity 6000.x.
@@ -37,35 +37,33 @@ $platformToolsUrl = "https://dl.google.com/android/repository/platform-tools_r34
 $platformToolsArchPath = Invoke-DownloadWithRetry -Url $platformToolsUrl
 Expand-7ZipArchive -Path $platformToolsArchPath -DestinationPath "${sdkInstallRoot}\SDK"
 
-$ndkUrl = "https://dl.google.com/android/repository/android-ndk-r23b-windows.zip"
+$ndkUrl = "https://dl.google.com/android/repository/android-ndk-r27c-windows.zip"
 $ndkArchPath = Invoke-DownloadWithRetry -Url $ndkUrl
 Expand-7ZipArchive -Path $ndkArchPath -DestinationPath "${sdkInstallRoot}"
 Start-Sleep -Seconds 5.0
-Rename-Item -Path  "${sdkInstallRoot}\android-ndk-r23b" -NewName "NDK"
+Rename-Item -Path  "${sdkInstallRoot}\android-ndk-r27c" -NewName "NDK"
 
-$commandLineToolsUrl = "https://dl.google.com/android/repository/commandlinetools-win-8092744_latest.zip"
+$commandLineToolsUrl = "https://dl.google.com/android/repository/commandlinetools-win-12266719_latest.zip"
 $commandLineToolsArchPath = Invoke-DownloadWithRetry -Url $commandLineToolsUrl
 New-Item -Path "${sdkInstallRoot}\SDK\cmdline-tools" -ItemType Directory
 Expand-7ZipArchive -Path $commandLineToolsArchPath -DestinationPath "${sdkInstallRoot}\SDK\cmdline-tools"
 Start-Sleep -Seconds 5.0
-Rename-Item -Path  "${sdkInstallRoot}\SDK\cmdline-tools\cmdline-tools" -NewName "6.0"
+Rename-Item -Path  "${sdkInstallRoot}\SDK\cmdline-tools\cmdline-tools" -NewName "16.0"
 
 $cmakeUrl = "https://dl.google.com/android/repository/cmake-3.22.1-windows.zip"
 $cmakeArchPath = Invoke-DownloadWithRetry -Url $cmakeUrl
 New-Item -Path "${sdkInstallRoot}\SDK\cmake" -ItemType Directory
 Expand-7ZipArchive -Path $cmakeArchPath -DestinationPath "${sdkInstallRoot}\SDK\cmake\3.22.1"
 
-$platformUrl = "https://dl.google.com/android/repository/platform-33-ext3_r03.zip"
-$platformArchPath = Invoke-DownloadWithRetry -Url $platformUrl
-Expand-7ZipArchive -Path $platformArchPath -DestinationPath "${sdkInstallRoot}\SDK\platforms"
-Start-Sleep -Seconds 5.0
-Rename-Item -Path  "${sdkInstallRoot}\SDK\platforms\android-13" -NewName "android-33"
-
 $platformUrl = "https://dl.google.com/android/repository/platform-34-ext7_r02.zip"
 $platformArchPath = Invoke-DownloadWithRetry -Url $platformUrl
 Expand-7ZipArchive -Path $platformArchPath -DestinationPath "${sdkInstallRoot}\SDK\platforms"
 
 $platformUrl = "https://dl.google.com/android/repository/platform-35_r01.zip"
+$platformArchPath = Invoke-DownloadWithRetry -Url $platformUrl
+Expand-7ZipArchive -Path $platformArchPath -DestinationPath "${sdkInstallRoot}\SDK\platforms"
+
+$platformUrl = "https://dl.google.com/android/repository/platform-36_r02.zip"
 $platformArchPath = Invoke-DownloadWithRetry -Url $platformUrl
 Expand-7ZipArchive -Path $platformArchPath -DestinationPath "${sdkInstallRoot}\SDK\platforms"
 
