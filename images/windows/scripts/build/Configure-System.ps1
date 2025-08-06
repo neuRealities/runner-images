@@ -29,38 +29,6 @@ if (Test-IsWin22) {
     Dismount-RegistryHive "HKLM\DEFAULT"
 }
 
-Write-Host "Clean up various directories"
-@(
-    "$env:SystemDrive\Recovery",
-    "$env:SystemRoot\logs",
-    "$env:SystemRoot\winsxs\manifestcache",
-    "$env:SystemRoot\Temp",
-    "$env:SystemDrive\Users\$env:INSTALL_USER\AppData\Local\Temp",
-    "$env:TEMP",
-    "$env:AZURE_CONFIG_DIR\logs",
-    "$env:AZURE_CONFIG_DIR\commands",
-    "$env:AZURE_CONFIG_DIR\telemetry"
-) | ForEach-Object {
-    if (Test-Path $_) {
-        Write-Host "Removing $_"
-        cmd /c "takeown /d Y /R /f $_ 2>&1" | Out-Null
-        if ($LASTEXITCODE -ne 0) {
-            throw "Failed to take ownership of $_"
-        }
-        cmd /c "icacls $_ /grant:r administrators:f /t /c /q 2>&1" | Out-Null
-        if ($LASTEXITCODE -ne 0) {
-            throw "Failed to grant administrators full control of $_"
-        }
-        Remove-Item $_ -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
-    }
-}
-
-$winInstallDir = "$env:SystemRoot\Installer"
-New-Item -Path $winInstallDir -ItemType Directory -Force | Out-Null
-
-# Remove AllUsersAllHosts profile
-Remove-Item $profile.AllUsersAllHosts -Force -ErrorAction SilentlyContinue | Out-Null
-
 # allow msi to write to temp folder
 # see https://github.com/actions/runner-images/issues/1704
 cmd /c "icacls $env:SystemRoot\Temp /grant Users:f /t /c /q 2>&1" | Out-Null
