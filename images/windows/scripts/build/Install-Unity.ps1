@@ -1,12 +1,12 @@
 ################################################################################
 ##  File:  Install-Unity.ps1
-##  Desc:  Install Unity 6000.1.14f1
+##  Desc:  Install Unity 6000.2.6f2
 ##  By:    Philip Lamb
-##  Mod:   2025-08-04
+##  Mod:   2025-10-06
 ################################################################################
 
-$UNITY_VERSION = "6000.1.14f1"
-$UNITY_DOWNLOAD_HASH = "db7aa045cc2c"
+$UNITY_VERSION = "6000.2.6f2"
+$UNITY_DOWNLOAD_HASH = "4a4dcaec6541"
 
 $argumentList = ("/S", "/D=C:\Program Files\Unity ${UNITY_VERSION}")
 Install-Binary -Url "https://download.unity3d.com/download_unity/${UNITY_DOWNLOAD_HASH}/Windows64EditorInstaller/UnitySetup64.exe" -InstallArgs $argumentList
