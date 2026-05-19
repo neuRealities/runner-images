@@ -30,7 +30,6 @@
             "platform" : "linux",
             "arch": "x64",
             "versions": [
-                "20.*",
                 "22.*",
                 "24.*"
             ]
@@ -71,7 +70,7 @@
     "java": {
         "default": "17",
         "versions": [ "8", "11", "17", "21", "25"],
-        "maven": "3.9.12"
+        "maven": "3"
     },
     "android": {
         "cmdline-tools": "commandlinetools-linux-11076708_latest.zip",
@@ -273,7 +272,7 @@
         "version": "4"
     },
     "node": {
-        "default": "20"
+        "default": "22"
     },
     "node_modules": [
         {
@@ -319,6 +318,9 @@
     ],
     "postgresql": {
         "version": "16"
+    },
+    "cmake": {
+        "version": "3.31.6"
     },
     "pwsh": {
         "version": "7.4"
