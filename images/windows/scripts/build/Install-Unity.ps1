@@ -1,12 +1,12 @@
 ################################################################################
 ##  File:  Install-Unity.ps1
-##  Desc:  Install Unity 6000.2.6f2
+##  Desc:  Install Unity 6000.4.7f1
 ##  By:    Philip Lamb
-##  Mod:   2025-10-06
+##  Mod:   2026-05-19
 ################################################################################
 
-$UNITY_VERSION = "6000.2.6f2"
-$UNITY_DOWNLOAD_HASH = "4a4dcaec6541"
+$UNITY_VERSION = "6000.4.7f1"
+$UNITY_DOWNLOAD_HASH = "f3c3c4248748"
 
 $argumentList = ("/S", "/D=C:\Program Files\Unity ${UNITY_VERSION}")
 Install-Binary -Url "https://download.unity3d.com/download_unity/${UNITY_DOWNLOAD_HASH}/Windows64EditorInstaller/UnitySetup64.exe" -InstallArgs $argumentList
@@ -27,13 +27,13 @@ $sdkToolsUrl = "https://dl.google.com/android/repository/sdk-tools-windows-43337
 $sdkToolsArchPath = Invoke-DownloadWithRetry -Url $sdkToolsUrl
 Expand-7ZipArchive -Path $sdkToolsArchPath -DestinationPath "${sdkInstallRoot}\SDK"
 
-$buildToolsUrl = "https://dl.google.com/android/repository/build-tools_r34-windows.zip"
+$buildToolsUrl = "https://dl.google.com/android/repository/build-tools_r36_windows.zip"
 $buildToolsArchPath = Invoke-DownloadWithRetry -Url $buildToolsUrl
 Expand-7ZipArchive -Path $buildToolsArchPath -DestinationPath "${sdkInstallRoot}\SDK\build-tools"
 Start-Sleep -Seconds 5.0
-Rename-Item -Path  "${sdkInstallRoot}\SDK\build-tools\android-14" -NewName "34.0.0"
+Rename-Item -Path  "${sdkInstallRoot}\SDK\build-tools\android-16" -NewName "36.0.0"
 
-$platformToolsUrl = "https://dl.google.com/android/repository/platform-tools_r34.0.5-windows.zip"
+$platformToolsUrl = "https://dl.google.com/android/repository/platform-tools_r36.0.0-win.zip"
 $platformToolsArchPath = Invoke-DownloadWithRetry -Url $platformToolsUrl
 Expand-7ZipArchive -Path $platformToolsArchPath -DestinationPath "${sdkInstallRoot}\SDK"
 
